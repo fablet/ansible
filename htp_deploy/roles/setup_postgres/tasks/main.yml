@@ -1,0 +1,57 @@
+---
+
+- name: Install PostgreSQL
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: "{{ update_apt_cache }}"
+  with_items: "{{ postgres_packages }}"
+
+- name: Ensure the PostgreSQL service is running
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: install psycopg2
+  pip:
+    name: psycopg2
+
+- name: Create DB
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+
+- name: Create DB User
+  become: true
+  become_user: postgres
+  postgresql_user:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: ALL
+    state: present
+
+- name: Ensure user does not have unnecessary privileges
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ db_user }}"
+    role_attr_flags: NOSUPERUSER,NOCREATEDB
+    state: present
+
+- name: Set default encoding for db user
+  become: true
+  become_user: postgres
+  command: psql -U postgres -c "ALTER ROLE {{ db_user }} SET client_encoding TO 'utf8'"
+
+- name: Set default transaction isolation for db user
+  become: true
+  become_user: postgres
+  command: psql -U postgres -c "ALTER ROLE {{ db_user }} SET default_transaction_isolation TO 'read committed'"
+
+- name: Set default timezone for db user
+  become: true
+  become_user: postgres
+  command: psql -U postgres -c "ALTER ROLE {{ db_user }} SET timezone TO 'UTC'"

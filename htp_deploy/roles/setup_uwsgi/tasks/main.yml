@@ -1,0 +1,65 @@
+---
+
+# check: should this be system wide to do emperor mode??
+- name: install uwsgi in virtual environment
+  pip:
+    name: uwsgi
+    virtualenv: /venv/{{ venv_name }}
+    virtualenv_python: python2.7
+
+#- name: set uwsgi binary path in virtualenv
+#  set_fact:
+#    uwsgi_bin: "/venv/{{ venv_name }}/bin/uwsgi"
+
+
+- name: Create uwsgi folder
+  file:
+    path: /etc/uwsgi/sites-available
+    state: directory
+
+- name: Create uwsgi folder
+  file:
+    path: /etc/uwsgi/sites-enabled
+    state: directory
+
+- name: Create uwsgi socket folder
+  file:
+    path: "{{ sock_dir }}"
+    state: directory
+
+- name: Copy uwsgi site ini file
+  template:
+    src: uwsgi_site.ini.j2
+    dest: "/etc/uwsgi/sites-available/{{ conf_name }}.ini"
+  notify:
+    - restart uwsgi
+
+- name: Enable site uwsgi app
+  file:
+    src: "/etc/uwsgi/sites-available/{{ conf_name }}.ini "
+    dest: "/etc/uwsgi/sites-enabled/{{ conf_name }}.ini"
+    state: link
+    force: yes
+  notify:
+    - restart uwsgi
+
+#- name: Copy uwsgi site conf file
+#  template:
+#    src: uwsgi.conf.j2
+#    dest: "/etc/init/{{ conf_name }}.conf"
+#  notify: restart uwsgi
+
+- name: delete uwsgi conf
+  file:
+    path: "/etc/init/{{ conf_name }}.conf"
+    state: absent
+
+#- name: Make sure uwsgi is running (and runs on boot)
+#  service:
+#    name: uwsgi
+#    state: started
+#    enabled: yes
+
+# check: create /etc/uwsgi/vassels dir and symlink from ini for emperor mode???
+# see gunicorn tasks/vars
+# create uwsgi.conf to launch emperor mode??? see templates

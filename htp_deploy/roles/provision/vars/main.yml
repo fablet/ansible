@@ -1,0 +1,26 @@
+
+# apt packages, you should not need to change this unless you have packages
+# listed in your requirements.txt that depend on system packages.
+system_packages:
+  - git-core
+  - postgresql
+  - postgresql-server-dev-all
+  - python-pip
+  - python-dev
+  - python-setuptools
+  - build-essential
+  - libjpeg-dev
+  - libpq-dev
+  - memcached
+  - libevent-dev
+  - binutils
+
+bash_ssl:
+  - bash
+  - openssl
+  - libssl-dev
+  - libssl-doc
+
+virtualenv_pkgs:
+  - virtualenv
+  - virtualenvwrapper
