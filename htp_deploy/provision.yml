@@ -1,0 +1,22 @@
+---
+
+- name: Provision and deploy a {{ project_name }} web server
+  hosts: web
+  gather_facts: false
+  become: yes
+
+  vars:
+    - setup_git_repo: yes
+    - update_apt_cache: yes
+
+  vars_files:
+    - env_vars/protected.yml
+    - env_vars/base.yml
+
+  roles:
+    - provision
+    - setup_postgres
+    - setup_postgis
+    - setup_uwsgi
+    - setup_nginx
+    - deploy

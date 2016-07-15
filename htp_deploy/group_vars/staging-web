@@ -1,0 +1,14 @@
+---
+
+git_branch: dev
+
+db_name: htp-staging
+db_user: hiketheplanet
+
+django_settings_file: "Hiking.settings.production"
+
+install_root: /srv/staging
+
+venv_name: htp-staging
+conf_name: "{{ venv_name }}"
+server_name: staging.hiketheplanet.info

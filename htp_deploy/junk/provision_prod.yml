@@ -1,0 +1,22 @@
+---
+
+- name: Provision a {{ project_name }} web server
+  hosts: servers
+  gather_facts: false
+  remote_user: {{ ansible_user }}
+  become: yes
+
+  vars:
+    - setup_git_repo: yes
+    - update_apt_cache: yes
+
+  vars_files:
+    - env_vars/protected.yml
+    - env_vars/production.yml
+    - env_vars/base.yml
+
+  roles:
+    - provision
+    - postgis
+    - postgres
+    - deploy

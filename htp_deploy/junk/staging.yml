@@ -1,0 +1,20 @@
+---
+
+ansible_user: root
+ssh_private_key_to_host: ~/.ssh/htp-do
+
+git_branch: dev
+
+db_name: htp-staging
+db_user: hiketheplanet
+
+django_settings_file: "Hiking.settings.production"
+
+migrate_command: migrate
+run_django_db_migrations: yes
+run_django_collectstatic: yes
+
+# the base path to install to. You should not need to change this.
+install_root: /srv/staging
+
+venv_name: htp-staging

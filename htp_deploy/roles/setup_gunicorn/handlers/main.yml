@@ -1,0 +1,8 @@
+---
+
+#- name: restart gunicorn
+#  service:
+#    name: gunicorn
+#    state: restarted
+#    enabled: yes
+#  listen: "restart web services"

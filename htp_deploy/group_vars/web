@@ -1,0 +1,8 @@
+---
+
+migrate_command: migrate
+run_django_db_migrations: yes
+run_django_collectstatic: yes
+
+sock_dir: /tmp/uwsgi
+uwsgi_sock_file: "{{ sock_dir }}/{{ conf_name }}.sock"

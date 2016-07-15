@@ -1,0 +1,52 @@
+---
+
+- name: Install system packages
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ system_packages }}"
+
+- name: install geoip
+  pip:
+    name: geoip2
+    virtualenv: /venv/{{ venv_name }}
+
+- name: Create wget GEOS download directory
+  file:
+    path: /tmp/geos
+    state: directory
+
+- name: download GEOS
+  become: root
+  get_url:
+    url: "{{ geos_url }}"
+    dest: /tmp/geos
+
+- name: Unpack GEOS source files
+  unarchive:
+    src: "/tmp/geos/{{ geos_src }}.tar.bz2"
+    dest: /tmp/geos/{{ geos_src }}
+    copy: no
+
+- name: Configure
+  command: ./configure
+  args:
+    chdir: /tmp/geos/{{ geos_src }}
+    creates: /tmp/geos/{{ geos_src }}/Makefile
+
+- name: Make
+  command: make
+  args:
+    chdir: /tmp/geos/{{ geos_src }}
+
+- name: Make install
+  command: make install
+  args:
+    chdir: /tmp/geos/{{ geos_src }}
+
+- name: Add PostGIS extension
+  become: true
+  become_user: postgres
+  postgresql_ext:
+    name: postgis
+    db: "{{ db_name }}"

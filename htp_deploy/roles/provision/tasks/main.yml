@@ -1,0 +1,51 @@
+---
+
+- name: Update/upgrade apt-get
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Ensure bash, OpenSSl, and libssl are the latest versions
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ bash_ssl }}"
+
+- name: Install system packages
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ system_packages }}"
+
+- name: Upgrade pip
+  pip:
+    name: pip
+    extra_args: "--upgrade"
+
+- name: install virtualenv
+  pip:
+    name: "{{ item }}"
+  with_items: "{{ virtualenv_pkgs }}"
+
+- name: add virtualenv to bash
+  lineinfile:
+    dest: ~/.bashrc
+    line: "export WORKON_HOME=/venv"
+    insertafter: EOF
+
+- name: add virtualenvwrapper to bash
+  lineinfile:
+    dest: ~/.bashrc
+    line: "source /usr/local/bin/virtualenvwrapper.sh"
+    insertafter: EOF
+
+- name: Create ssh folder
+  file:
+    path: /.ssh
+    state: directory
+
+- name: Upload github ssh key
+  copy:
+    src: "{{ git_host_ssh }}"
+    dest: /.ssh/github
+    mode: 0600

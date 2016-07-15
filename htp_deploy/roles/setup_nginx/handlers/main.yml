@@ -1,0 +1,15 @@
+---
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+#    virtualenv:  /venv/{{ venv_name }}
+#  listen: "restart web services"  ansible 2.2
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded
+#    virtualenv:  /venv/{{ venv_name }}
