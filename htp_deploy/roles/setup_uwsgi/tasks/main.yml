@@ -31,8 +31,7 @@
   template:
     src: uwsgi_site.ini.j2
     dest: "/etc/uwsgi/sites-available/{{ conf_name }}.ini"
-  notify:
-    - restart uwsgi
+  notify: restart uwsgi
 
 - name: Enable site uwsgi app
   file:
@@ -40,19 +39,13 @@
     dest: "/etc/uwsgi/sites-enabled/{{ conf_name }}.ini"
     state: link
     force: yes
-  notify:
-    - restart uwsgi
+  notify: restart uwsgi
 
 #- name: Copy uwsgi site conf file
 #  template:
 #    src: uwsgi.conf.j2
 #    dest: "/etc/init/{{ conf_name }}.conf"
 #  notify: restart uwsgi
-
-- name: delete uwsgi conf
-  file:
-    path: "/etc/init/{{ conf_name }}.conf"
-    state: absent
 
 #- name: Make sure uwsgi is running (and runs on boot)
 #  service:

@@ -1,6 +1,6 @@
 ---
 
-git_branch: dev
+git_branch: master
 
 db_name: hiketheplanet
 db_user: hiketheplanet
