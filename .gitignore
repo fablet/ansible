@@ -1,3 +1,4 @@
 .idea
 *junk
 *.retry
+protected.yml
