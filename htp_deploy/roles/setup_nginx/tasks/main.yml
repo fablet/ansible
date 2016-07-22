@@ -49,6 +49,19 @@
     force: yes
   notify: restart nginx
 
+- name: add ansible_user to server_user (usually www-data) group
+  user:
+    name: "{{ ansible_user }}"
+    group: "{{ server_user }}"
+    state: present
+
+- name: Change uwsgi_params file group to server_user
+  file:
+    path: /etc/nginx/uwsgi_params
+    group: "{{ server_user }}"
+    owner: "{{ server_user }}"
+    state: file
+
 - name: Ensure Nginx service is started
   service:
     name: nginx

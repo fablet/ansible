@@ -5,9 +5,13 @@
 # the base directory (full path)
 chdir           = {{ project_path }}
 # Django's wsgi file
-module          = {{ wsgi_module }}:application
+module          = {{ wsgi_module }}
 # the virtualenv (full path)
 home            = /venv/{{ venv_name }}
+
+# uid/guid to server_user (generally www-data)
+uid = {{ server_user }}
+gid = {{ server_user }}
 
 # process-related settings
 # master
@@ -17,8 +21,11 @@ processes       = 10
 # socket
 socket = {{ uwsgi_sock_file }}
 # give appropriate permissions to socket file
-chmod-socket    = 664
+chown-socket    = {{ server_user }}
+chmod-socket    = 666
 # clear environment on exit
 vacuum = true
 # logs
 daemonize = {{ application_log_dir }}/uwsgi.log
+#plugins
+plugins = python

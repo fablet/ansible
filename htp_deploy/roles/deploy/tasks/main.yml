@@ -1,46 +1,49 @@
 ---
 
-#- name: Clone/pull project repo
-#  git:
-#    repo: "{{ project_repo }}"
-#    dest: "{{ project_path }}"
-#    accept_hostkey: yes
-#    version: "{{ git_branch }}"
-#    key_file: /.ssh/github
-#    force: yes
-#
-#- name: Delete all .pyc files
-#  command: find . -name '*.pyc' -delete
-#  args:
-#    chdir: "{{ project_path }}"
-#
-#- name: install python packages in virtual environment
-#  pip:
-#    virtualenv: "/venv/{{ venv_name }}"
-#    virtualenv_python: python2.7
-#    requirements: "{{ project_path }}/requirements/production.txt"
-#
-#- name: Run Django database migrations
-#  django_manage:
-#    command: "{{ migrate_command }}"
-#    app_path: "{{ project_path }}"
-#    settings: "{{ django_settings_file }}"
-#    virtualenv:  "/venv/{{ venv_name }}"
-#  environment: "{{ django_environment }}"
-#  when: run_django_db_migrations is defined and run_django_db_migrations
-#  tags: django.migrate
-#
-#- name: Run Django collectstatic
-#  django_manage:
-#    command: collectstatic
-#    app_path: "{{ project_path }}"
-#    settings: "{{ django_settings_file }}"
-#    virtualenv:  "/venv/{{ venv_name }}"
-#  environment: "{{ django_environment }}"
-#  when: run_django_collectstatic is defined and run_django_collectstatic
-#  tags: django.collectstatic
+- name: Clone/pull project repo
+  git:
+    repo: "{{ project_repo }}"
+    dest: "{{ project_path }}"
+    accept_hostkey: yes
+    version: "{{ git_branch }}"
+    key_file: /.ssh/github
+    force: yes
 
-# ensure base htp superuser exists
+- name: Delete all .pyc files
+  command: find . -name '*.pyc' -delete
+  args:
+    chdir: "{{ project_path }}"
+
+- name: Make sure uwsgi log file exists
+  file:
+    path: "{{ project_path }}/logs/uwsgi.log"
+    state: touch
+
+- name: install python packages in virtual environment
+  pip:
+    virtualenv: "/venv/{{ venv_name }}"
+    virtualenv_python: python2.7
+    requirements: "{{ project_path }}/requirements/production.txt"
+
+- name: Run Django database migrations
+  django_manage:
+    command: "{{ migrate_command }}"
+    app_path: "{{ project_path }}"
+    settings: "{{ django_settings_file }}"
+    virtualenv:  "/venv/{{ venv_name }}"
+  environment: "{{ django_environment }}"
+  when: run_django_db_migrations is defined and run_django_db_migrations
+  tags: django.migrate
+
+- name: Run Django collectstatic
+  django_manage:
+    command: collectstatic
+    app_path: "{{ project_path }}"
+    settings: "{{ django_settings_file }}"
+    virtualenv:  "/venv/{{ venv_name }}"
+  environment: "{{ django_environment }}"
+  when: run_django_collectstatic is defined and run_django_collectstatic
+  tags: django.collectstatic
 
 - name: restart everything
   command: echo "web services restarted"
