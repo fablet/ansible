@@ -4,7 +4,7 @@
   service:
     name: uwsgi
     state: restarted
-    enabled: yes
+#    enabled: yes
 #    virtualenv:  /venv/{{ venv_name }}
 #  listen: "restart web services"  -- uncomment on ansible 2.2 release/install
 

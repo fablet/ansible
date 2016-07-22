@@ -7,7 +7,7 @@ db_user: hiketheplanet
 
 django_settings_file: "Hiking.settings.production"
 
-install_root: /srv
+install_root: /var/www
 
 venv_name: "{{ project_name }}"
 
