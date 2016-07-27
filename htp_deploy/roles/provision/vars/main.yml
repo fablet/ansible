@@ -3,8 +3,6 @@
 # listed in your requirements.txt that depend on system packages.
 system_packages:
   - git-core
-  - postgresql
-  - postgresql-server-dev-all
   - python-pip
   - python-dev
   - python-setuptools

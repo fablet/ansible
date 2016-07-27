@@ -1,28 +1,40 @@
 ---
 
+- name: ensure server_user exists
+  become: true
+  user:
+    name: "{{ server_user }}"
+    group: "{{ server_user }}"
+    state: present
+
 - name: Update/upgrade apt-get
+  become: true
   apt:
     update_cache: yes
     upgrade: dist
 
 - name: Ensure bash, OpenSSl, and libssl are the latest versions
+  become: true
   apt:
     name: "{{ item }}"
     state: latest
   with_items: "{{ bash_ssl }}"
 
 - name: Install system packages
-  apt: 
+  become: true
+  apt:
     name: "{{ item }}"
     state: latest
   with_items: "{{ system_packages }}"
 
 - name: Upgrade pip
+  become: true
   pip:
     name: pip
     extra_args: "--upgrade"
 
 - name: install virtualenv
+  become: true
   pip:
     name: "{{ item }}"
   with_items: "{{ virtualenv_pkgs }}"

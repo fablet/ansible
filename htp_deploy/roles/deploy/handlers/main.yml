@@ -5,6 +5,33 @@
     name: memcached
     state: restarted
     enabled: yes
-#    virtualenv:  /venv/{{ venv_name }}
 #  listen: "restart web services"
 
+- name: start memcached
+  service:
+    name: memcached
+    state: started
+    enabled: yes
+#  listen: "start web services"
+
+- name: stop memcached
+  service:
+    name: memcached
+    state: stopped
+    enabled: yes
+#  listen: "stop web services"
+
+# Temporary duplication until Ansible repairs Dynamic Include issues
+- name: restart nginx
+  become: true
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: restart uwsgi
+  become: true
+  service:
+    name: uwsgi
+    state: restarted
+    enabled: yes

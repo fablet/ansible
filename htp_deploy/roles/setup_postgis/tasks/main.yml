@@ -11,21 +11,22 @@
     name: geoip2
     virtualenv: /venv/{{ venv_name }}
 
-- name: Create wget GEOS download directory
+- name: Create tmp GEOS download directory
   file:
     path: /tmp/geos
     state: directory
 
 - name: download GEOS
-  become: root
+  become: true
   get_url:
     url: "{{ geos_url }}"
     dest: /tmp/geos
 
 - name: Unpack GEOS source files
+  become: true
   unarchive:
     src: "/tmp/geos/{{ geos_src }}.tar.bz2"
-    dest: /tmp/geos/{{ geos_src }}
+    dest: /tmp/geos
     copy: no
 
 - name: Configure
@@ -35,11 +36,13 @@
     creates: /tmp/geos/{{ geos_src }}/Makefile
 
 - name: Make
+  become: true
   command: make
   args:
     chdir: /tmp/geos/{{ geos_src }}
 
 - name: Make install
+  become: true
   command: make install
   args:
     chdir: /tmp/geos/{{ geos_src }}

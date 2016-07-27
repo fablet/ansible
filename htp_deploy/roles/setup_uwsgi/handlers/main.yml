@@ -1,11 +1,24 @@
 ---
 
 - name: restart uwsgi
+  become: true
   service:
     name: uwsgi
     state: restarted
-#    enabled: yes
-#    virtualenv:  /venv/{{ venv_name }}
+    enabled: yes
 #  listen: "restart web services"  -- uncomment on ansible 2.2 release/install
 
-# check: start/restart handler for uwsgi emperor mode. create www-data user??
+- name: start uwsgi
+  become: true
+  service:
+    name: uwsgi
+    state: started
+    enabled: yes
+#  listen: "start web services"
+
+- name: stop uwsgi
+  become: true
+  service:
+    name: uwsgi
+    state: stopped
+#  listen: "stop web services"

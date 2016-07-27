@@ -1,15 +1,32 @@
 ---
 
 - name: restart nginx
+  become: true
   service:
     name: nginx
     state: restarted
     enabled: yes
-#    virtualenv:  /venv/{{ venv_name }}
 #  listen: "restart web services"  ansible 2.2
 
 - name: reload nginx
+  become: true
   service:
     name: nginx
     state: reloaded
-#    virtualenv:  /venv/{{ venv_name }}
+#  listen: "reload web services"
+
+- name: stop nginx
+  become: true
+  service:
+    name: nginx
+    state: stopped
+    enabled: yes
+#  listen: "stop web services"
+
+- name: start nginx
+  become: true
+  service:
+    name: nginx
+    state: start
+    enabled: yes
+#  listen: "start web services"
