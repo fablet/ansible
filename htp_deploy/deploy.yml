@@ -2,6 +2,7 @@
 
 - name: Deploy {{ project_name }} server
   remote_user: {{ ansible_user }}
+  hosts: web
   gather_facts: false
   become: yes
 
@@ -11,3 +12,7 @@
 
   roles:
     - deploy
+
+#  handlers:  uncomment on Ansible fix in later release or rollback to 1.9x
+#    - include: roles/setup_uwsgi/handlers/main.yml
+#    - include: roles/setup_nginx/handlers/main.yml

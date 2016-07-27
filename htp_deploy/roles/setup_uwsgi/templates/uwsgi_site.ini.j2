@@ -5,7 +5,7 @@
 # the base directory (full path)
 chdir           = {{ project_path }}
 # Django's wsgi file
-module          = {{ wsgi_module }}
+module          = {{ wsgi_module }}:application
 # the virtualenv (full path)
 home            = /venv/{{ venv_name }}
 
@@ -17,15 +17,24 @@ gid = {{ server_user }}
 # master
 master          = true
 # maximum number of worker processes
-processes       = 10
+processes       = 5
+
 # socket
 socket = {{ uwsgi_sock_file }}
 # give appropriate permissions to socket file
 chown-socket    = {{ server_user }}
-chmod-socket    = 666
+chmod-socket    = 664
 # clear environment on exit
 vacuum = true
+
 # logs
-daemonize = {{ application_log_dir }}/uwsgi.log
+daemonize = {{ application_log_dir }}/uwsgi/{{ conf_name }}.log
+
 #plugins
-plugins = python
+#plugins = python
+
+# pidfile
+safe-pidfile = {{ uwsgi_pid_file }}
+
+harakiri = 30
+max-requests = 5000

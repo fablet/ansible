@@ -14,11 +14,6 @@
   args:
     chdir: "{{ project_path }}"
 
-- name: Make sure uwsgi log file exists
-  file:
-    path: "{{ project_path }}/logs/uwsgi.log"
-    state: touch
-
 - name: install python packages in virtual environment
   pip:
     virtualenv: "/venv/{{ venv_name }}"

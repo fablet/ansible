@@ -1,28 +1,47 @@
 ---
 
-- name: install uwsgi systemwide
-  apt:
-    name: "{{ item }}"
+#- name: install uwsgi systemwide
+#  become: true
+#  apt:
+#    name: "{{ item }}"
+#    state: latest
+#  with_items:
+#    - uwsgi
+#    - uwsgi-plugin-python
+
+- name: pip install uwsgi
+  become: true
+  pip:
+    name: uwsgi
     state: latest
-  with_items:
-    - uwsgi
-    - uwsgi-plugin-python
 
-- name: Create uwsgi folder
+- name: Create uwsgi log folder
   file:
-    path: /etc/uwsgi/sites-available
+    path: "{{ application_log_dir }}/uwsgi"
     state: directory
 
-- name: Create uwsgi folder
+- name: Make sure uwsgi log file exists
   file:
-    path: /etc/uwsgi/vassals
-    state: directory
+    path: "{{ application_log_dir }}/uwsgi/{{ conf_name }}.log"
+    group: "{{ server_user }}"
+    owner: "{{ server_user }}"
+    state: touch
 
 - name: Create uwsgi socket folder
   file:
     path: "{{ sock_dir }}"
     group: "{{ server_user }}"
     owner: "{{ server_user }}"
+    state: directory
+
+- name: Create uwsgi site folder
+  file:
+    path: /etc/uwsgi/apps-available
+    state: directory
+
+- name: Create uwsgi site folder
+  file:
+    path: /etc/uwsgi/apps-enabled
     state: directory
 
 - name: Copy uwsgi site ini file
@@ -42,14 +61,12 @@
 - name: Copy uwsgi site conf file
   template:
     src: uwsgi.conf.j2
-    dest: "/etc/init/{{ conf_name }}.conf"
+    dest: "/etc/init/uwsgi.conf"
   notify: restart uwsgi
 
 - name: Make sure uwsgi is running (and runs on boot)
-  service:
-    name: uwsgi
-    state: started
-    enabled: yes
+  command: echo "web services restarted"
+  notify: start uwsgi
 
 # see gunicorn tasks/vars
 # create uwsgi.conf to launch emperor mode??? see templates

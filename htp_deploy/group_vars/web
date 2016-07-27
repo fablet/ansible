@@ -6,5 +6,4 @@ run_django_collectstatic: yes
 
 sock_dir: /tmp/uwsgi
 uwsgi_sock_file: "{{ sock_dir }}/{{ conf_name }}.sock"
-
-server_user: www-data
+uwsgi_pid_file: "{{ sock_dir }}/{{ conf_name }}.pid"

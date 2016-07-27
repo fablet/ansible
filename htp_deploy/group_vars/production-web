@@ -1,6 +1,6 @@
 ---
 
-git_branch: master
+git_branch: dev  # change back to master after finally successfully deploying server and merging all settings to master
 
 db_name: hiketheplanet
 db_user: hiketheplanet
@@ -13,4 +13,4 @@ venv_name: "{{ project_name }}"
 
 conf_name: "{{ project_name }}"
 
-server_name: hiketheplanet.info
+server_name: hiketheplanet.info www.hiketheplanet.info
